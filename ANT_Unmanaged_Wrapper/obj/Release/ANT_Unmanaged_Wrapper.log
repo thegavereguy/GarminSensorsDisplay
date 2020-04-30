@@ -1,0 +1,7 @@
+﻿  DLL_exports.cpp
+     Creazione della libreria I:\ANT-SDK_PC.3.5\Release\ANT_WrappedLib.lib e dell'oggetto I:\ANT-SDK_PC.3.5\Release\ANT_WrappedLib.exp
+  Generazione codice in corso...
+  Previous IPDB not found, fall back to full compilation.
+  All 1204 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Generazione codice terminata
+  ANT_Unmanaged_Wrapper.vcxproj -> I:\ANT-SDK_PC.3.5\Release\ANT_WrappedLib.dll

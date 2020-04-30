@@ -1,0 +1,2 @@
+I:\ANT-SDK_PC.3.5\Debug\ANT_LIB.pdb
+I:\ANT-SDK_PC.3.5\ANT_LIB\Debug\ANT_LIB.pdb
