@@ -32,27 +32,34 @@ namespace ANT_Console_Demo
     {
         static readonly byte CHANNEL_TYPE_INVALID = 2;
 
-        static readonly byte USER_ANT_CHANNEL = 0;         // ANT Channel to use
+        static readonly byte USER_ANT_CHANNEL_CADENZA = 0;  // ANT Channel to use
+        static readonly byte USER_ANT_CHANNEL_VELOCITA = 1;
         static readonly ushort USER_DEVICENUM = 0;        // Device number    
-        static readonly byte USER_DEVICETYPE = 122;          // Device type
-        static readonly byte USER_TRANSTYPE = 0;           // Transmission type
+        static readonly byte USER_DEVICETYPE_CADENZA = 122;
+        static readonly byte USER_DEVICETYPE_VELOCITA = 123;// Device type     ---- 122 per cadenza, 123 per velocità
+        static readonly byte USER_TRANSTYPE = 0;           // Transmission type    ----- lasciare sempre 0 per ricerca del sensore
 
         static readonly byte USER_RADIOFREQ = 57;          // RF Frequency + 2400 MHz
-        static readonly ushort USER_CHANNELPERIOD = 8102;  // Channel Period (8192/32768)s period = 4Hz
-        
+        static readonly ushort USER_CHANNELPERIOD_CADENZA = 8102;   // Channel Period (8192/32768)s period = 4Hz
+        static readonly ushort USER_CHANNELPERIOD_VELOCITA = 8118;  
+
         static readonly byte[] USER_NETWORK_KEY = { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 };
-        static readonly byte USER_NETWORK_NUM = 0;         // The network key is assigned to this network number
+        static readonly byte USER_NETWORK_NUM_CADENZA = 0;         // The network key is assigned to this network number-----aggiunto _CADENZA per inizializzare singolo canale
+        static readonly byte USER_NETWORK_NUM_VELOCITA = 1;         //idem
 
         static ANT_Device device0;
         static ANT_Channel channel0;
-        static ANT_ReferenceLibrary.ChannelType channelType;
+        static ANT_Channel channel1;
+        static ANT_ReferenceLibrary.ChannelType channelTypeCadenza;
+        static ANT_ReferenceLibrary.ChannelType channelTypeVelocita;
         static byte[] txBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
         static bool bDone;
         static bool bDisplay;
         static bool bBroadcasting;
         static int iIndex = 0;
 
-
+        string sensoreCadenza = "cadenza";
+        string sensoreVelocita = "velocita";
         ////////////////////////////////////////////////////////////////////////////////
         // Main
         //
@@ -109,8 +116,13 @@ namespace ANT_Console_Demo
                 device0 = new ANT_Device();   // Create a device instance using the automatic constructor (automatic detection of USB device number and baud rate)
                 device0.deviceResponse += new ANT_Device.dDeviceResponseHandler(DeviceResponse);    // Add device response function to receive protocol event messages
 
-                channel0 = device0.getChannel(USER_ANT_CHANNEL);    // Get channel from ANT device
-                channel0.channelResponse += new dChannelResponseHandler(ChannelResponse);  // Add channel response function to receive channel event messages
+               /* channel0 = device0.getChannel(USER_ANT_CHANNEL_CADENZA);    // Get channel from ANT device
+                channel0.channelResponse += new dChannelResponseHandler(ChannelResponse);  // Add channel response function to receive channel event messages*/
+
+                channel1 = device0.getChannel(USER_ANT_CHANNEL_VELOCITA);    
+                channel1.channelResponse += new dChannelResponseHandler(ChannelResponse);  
+
+
                 Console.WriteLine("Initialization was successful!");
             }
             catch (Exception ex)
@@ -138,7 +150,8 @@ namespace ANT_Console_Demo
         ////////////////////////////////////////////////////////////////////////////////
         static void Start(byte ucChannelType_)
         {
-            byte ucChannelType = ucChannelType_;
+            byte ucChannelTypeCadenza = ucChannelType_;
+            byte ucChannelTypeVelocita = ucChannelType_;
             bDone = false;
             bDisplay = true;
             bBroadcasting = false;
@@ -149,38 +162,66 @@ namespace ANT_Console_Demo
             // prompt the user to specify one now
             do
             {
-                if (ucChannelType == CHANNEL_TYPE_INVALID)
+                if (ucChannelTypeCadenza == CHANNEL_TYPE_INVALID) //inserire tipo canale rer sensore di candenza
                 {
-                    Console.WriteLine("Channel Type? (Master = 0, Slave = 1)");
+                    Console.WriteLine("Channel Type(cadenza)? (Master = 0, Slave = 1)");
                     try
                     {
-                        ucChannelType = byte.Parse(Console.ReadLine());
+                        ucChannelTypeCadenza = byte.Parse(Console.ReadLine());
                     }
                     catch (Exception)
                     {
-                        ucChannelType = CHANNEL_TYPE_INVALID;
+                        ucChannelTypeCadenza = CHANNEL_TYPE_INVALID;
                     }
                 }
 
-                if (ucChannelType == 0)
+                if (ucChannelTypeVelocita == CHANNEL_TYPE_INVALID)      //inserire tipo canale rer sensore di velocità
                 {
-                    channelType = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
+                    Console.WriteLine("Channel Type(velocita)? (Master = 0, Slave = 1)");
+                    try
+                    {
+                        ucChannelTypeVelocita = byte.Parse(Console.ReadLine());
+                    }
+                    catch (Exception)
+                    {
+                        ucChannelTypeVelocita = CHANNEL_TYPE_INVALID;
+                    }
                 }
-                else if (ucChannelType == 1)
+
+                if (ucChannelTypeCadenza == 0)      //assegnazione indirizzo di ricezione/trasmissione sensore cadenza
                 {
-                    channelType = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00;
+                    channelTypeCadenza = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
+                }
+                else if (ucChannelTypeCadenza == 1)
+                {
+                    channelTypeCadenza = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00;
                 }
                 else
                 {
-                    ucChannelType = CHANNEL_TYPE_INVALID;
+                    ucChannelTypeCadenza = CHANNEL_TYPE_INVALID;
                     Console.WriteLine("Error: Invalid channel type");
                 }
-            } while (ucChannelType == CHANNEL_TYPE_INVALID);
+
+                if (ucChannelTypeVelocita == 0)     //assegnazione indirizzo di ricezione/trasmissione sensore velocità
+                {
+                    channelTypeVelocita = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
+                }
+                else if (ucChannelTypeVelocita == 1)
+                {
+                    channelTypeVelocita = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00;
+                }
+                else
+                {
+                    ucChannelTypeVelocita = CHANNEL_TYPE_INVALID;
+                    Console.WriteLine("Error: Invalid channel type");
+                }
+
+            } while (ucChannelTypeCadenza == CHANNEL_TYPE_INVALID || ucChannelTypeVelocita == CHANNEL_TYPE_INVALID);  //fa un po schifo ma vabbe, cambiare in futuro
 
             try
             {
-                ConfigureANT();
-
+                ConfigureANT(USER_NETWORK_NUM_CADENZA, channelTypeCadenza,USER_DEVICETYPE_CADENZA, USER_CHANNELPERIOD_CADENZA);
+                ConfigureANT(USER_NETWORK_NUM_VELOCITA, channelTypeVelocita, USER_DEVICETYPE_VELOCITA, USER_CHANNELPERIOD_VELOCITA);
                 while (!bDone)
                 {
                     string command = Console.ReadLine();
@@ -219,7 +260,7 @@ namespace ANT_Console_Demo
                             channel0.sendBurstTransfer(myTxBuffer);
                             break;
                         }
-
+                        /*          non serve al momento
                         case "R":
                         case "r":
                         {
@@ -227,7 +268,7 @@ namespace ANT_Console_Demo
                             ConfigureANT();
                             break;
                         }
-
+                        */
                         case "C":
                         case "c":
                         {
@@ -313,7 +354,7 @@ namespace ANT_Console_Demo
         //
         // Resets the system, configures the ANT channel and starts the demo
         ////////////////////////////////////////////////////////////////////////////////
-        private static void ConfigureANT()
+        private static void ConfigureANT(byte USER_NETWORK_NUM, ANT_ReferenceLibrary.ChannelType channelType, byte USER_DEVICETYPE, ushort USER_CHANNELPERIOD)
         {
             Console.WriteLine("Resetting module...");
             device0.ResetSystem();     // Soft reset
@@ -324,13 +365,13 @@ namespace ANT_Console_Demo
             // 500ms is usually a safe value to ensure you wait long enough for any response
             // If you do not specify a wait time, the command is simply sent, and you have to monitor the protocol events for the response,
             Console.WriteLine("Setting network key...");
-            if (device0.setNetworkKey(USER_NETWORK_NUM, USER_NETWORK_KEY, 2500))
+            if (device0.setNetworkKey(USER_NETWORK_NUM, USER_NETWORK_KEY, 500))
                 Console.WriteLine("Network key set");
             else
                 throw new Exception("Error configuring network key");
 
             Console.WriteLine("Assigning channel...");
-            if (channel0.assignChannel(channelType, USER_NETWORK_NUM, 2500))
+            if (channel0.assignChannel(channelType, USER_NETWORK_NUM, 500))
                 Console.WriteLine("Channel assigned");
             else
                 throw new Exception("Error assigning channel");
@@ -365,13 +406,13 @@ namespace ANT_Console_Demo
                 throw new Exception("Error opening channel");
             }
 
-#if (ENABLE_EXTENDED_MESSAGES)
+/*#if (ENABLE_EXTENDED_MESSAGES)
             // Extended messages are not supported in all ANT devices, so
             // we will not wait for the response here, and instead will monitor 
             // the protocol events
             Console.WriteLine("Enabling extended messages...");
             device0.enableRxExtendedMessages(true);
-#endif
+#endif*/
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -495,7 +536,7 @@ namespace ANT_Console_Demo
                             }
                             if (response.responseID == (byte)ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E 
                                 || response.responseID == (byte) ANT_ReferenceLibrary.ANTMessageID.EXT_BROADCAST_DATA_0x5D)
-                                Console.Write("Rx:(" + response.antChannel.ToString() + "): ");
+                                Console.Write("Rx:(" + response.antChannel.ToString() + "): ");    //questo è quello importante
                             else if (response.responseID == (byte)ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F
                                 || response.responseID == (byte)ANT_ReferenceLibrary.ANTMessageID.EXT_ACKNOWLEDGED_DATA_0x5E)
                                 Console.Write("Acked Rx:(" + response.antChannel.ToString() + "): ");
