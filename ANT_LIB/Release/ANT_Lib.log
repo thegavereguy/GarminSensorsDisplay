@@ -1,10 +1,10 @@
 ﻿  antfs_client_channel.cpp
-I:\ANT-SDK_PC.3.5\ANT_LIB\software\ANTFS\antfs_client_channel.cpp(1046,136): warning C4100: 'pvData_': parametro formale senza riferimenti
-I:\ANT-SDK_PC.3.5\ANT_LIB\software\ANTFS\antfs_client_channel.cpp(1046,115): warning C4100: 'ulDataLength_': parametro formale senza riferimenti
+I:\GARMIN_SENSORS_DISPLAY\ANT_LIB\software\ANTFS\antfs_client_channel.cpp(1046,136): warning C4100: 'pvData_': parametro formale senza riferimenti
+I:\GARMIN_SENSORS_DISPLAY\ANT_LIB\software\ANTFS\antfs_client_channel.cpp(1046,115): warning C4100: 'ulDataLength_': parametro formale senza riferimenti
   antfs_host.cpp
   antfs_host_channel.cpp
-I:\ANT-SDK_PC.3.5\ANT_LIB\software\ANTFS\antfs_host_channel.cpp(5703,28): warning C4458: se si dichiara 'ucChannelStatus', il membro della classe verrà nascosto
-I:\ANT-SDK_PC.3.5\ANT_LIB\software\ANTFS\antfs_host_channel.hpp(138,13): message : vedere la dichiarazione di 'ANTFSHostChannel::ucChannelStatus'
+I:\GARMIN_SENSORS_DISPLAY\ANT_LIB\software\ANTFS\antfs_host_channel.cpp(5703,28): warning C4458: se si dichiara 'ucChannelStatus', il membro della classe verrà nascosto
+I:\GARMIN_SENSORS_DISPLAY\ANT_LIB\software\ANTFS\antfs_host_channel.hpp(138,13): message : vedere la dichiarazione di 'ANTFSHostChannel::ucChannelStatus'
   dsi_ant_device.cpp
   dsi_cm_library.cpp
   dsi_ant_device_polling.cpp
@@ -34,6 +34,6 @@ I:\ANT-SDK_PC.3.5\ANT_LIB\software\ANTFS\antfs_host_channel.hpp(138,13): message
   dsi_convert.c
   dsi_thread_win32.c
   macros.c
-I:\ANT-SDK_PC.3.5\ANT_LIB\software\system\macros.c(45,17): warning C4245: 'return': conversione da 'int' a 'size_t'. Errore di corrispondenza tra signed e unsigned.
-  ANT_Lib.vcxproj -> I:\ANT-SDK_PC.3.5\Release\ANT_LIB.lib
+I:\GARMIN_SENSORS_DISPLAY\ANT_LIB\software\system\macros.c(45,17): warning C4245: 'return': conversione da 'int' a 'size_t'. Errore di corrispondenza tra signed e unsigned.
+  ANT_Lib.vcxproj -> I:\GARMIN_SENSORS_DISPLAY\Release\ANT_LIB.lib
   0 File copiati

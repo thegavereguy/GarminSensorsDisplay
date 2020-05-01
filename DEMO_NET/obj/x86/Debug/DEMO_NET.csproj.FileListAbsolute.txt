@@ -1,0 +1,8 @@
+I:\GARMIN_SENSORS_DISPLAY\Debug\demo_net.exe.config
+I:\GARMIN_SENSORS_DISPLAY\Debug\demo_net.exe
+I:\GARMIN_SENSORS_DISPLAY\Debug\demo_net.pdb
+I:\GARMIN_SENSORS_DISPLAY\DEMO_NET\obj\x86\Debug\DEMO_NET.csprojAssemblyReference.cache
+I:\GARMIN_SENSORS_DISPLAY\DEMO_NET\obj\x86\Debug\DEMO_NET.csproj.CoreCompileInputs.cache
+I:\GARMIN_SENSORS_DISPLAY\DEMO_NET\obj\x86\Debug\DEMO_NET.csproj.CopyComplete
+I:\GARMIN_SENSORS_DISPLAY\DEMO_NET\obj\x86\Debug\demo_net.exe
+I:\GARMIN_SENSORS_DISPLAY\DEMO_NET\obj\x86\Debug\demo_net.pdb

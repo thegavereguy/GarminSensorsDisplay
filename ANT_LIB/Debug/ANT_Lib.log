@@ -35,7 +35,5 @@
   checksum.c
   antfs_directory.c
   Generazione del codice in corso...
-  ANT_Lib.vcxproj -> I:\ANT-SDK_PC.3.5\Debug\ANT_LIB.lib
-  I:\ANT-SDK_PC.3.5\ANT_LIB\..\Bin\DSI_CP210xManufacturing_3_1.dll
-  I:\ANT-SDK_PC.3.5\ANT_LIB\..\Bin\DSI_SiUSBXp_3_1.dll
-  2 File copiati
+  ANT_Lib.vcxproj -> I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_LIB.lib
+  0 File copiati

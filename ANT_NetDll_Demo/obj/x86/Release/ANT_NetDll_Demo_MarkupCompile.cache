@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-I:\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Release\
+I:\GARMIN_SENSORS_DISPLAY\ANT_NetDll_Demo\obj\x86\Release\
 ANT_NetDll_Demo
 none
 false
 TRACE
-I:\ANT-SDK_PC.3.5\ANT_NetDll_Demo\App.xaml
+I:\GARMIN_SENSORS_DISPLAY\ANT_NetDll_Demo\App.xaml
 1-96718033
 
 5312708644
-121772510247
+12-1560110674
 DemoWindow.xaml;
 
 False

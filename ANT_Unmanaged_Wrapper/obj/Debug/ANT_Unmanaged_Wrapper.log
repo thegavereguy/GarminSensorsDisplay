@@ -1,4 +1,4 @@
 ﻿  DLL_exports.cpp
 ant_lib.lib(macros.obj) : warning LNK4075: '/EDITANDCONTINUE' ignorato a causa della specifica di '/SAFESEH'
-     Creazione della libreria I:\ANT-SDK_PC.3.5\Debug\ANT_WrappedLib.lib e dell'oggetto I:\ANT-SDK_PC.3.5\Debug\ANT_WrappedLib.exp
-  ANT_Unmanaged_Wrapper.vcxproj -> I:\ANT-SDK_PC.3.5\Debug\ANT_WrappedLib.dll
+     Creazione della libreria I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_WrappedLib.lib e dell'oggetto I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_WrappedLib.exp
+  ANT_Unmanaged_Wrapper.vcxproj -> I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_WrappedLib.dll
