@@ -1,0 +1,16 @@
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.exe.config
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.exe
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.pdb
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csprojAssemblyReference.cache
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.Properties.Resources.resources
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.GenerateResource.cache
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.CoreCompileInputs.cache
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.exe
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.pdb
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.Form1.resources
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT+ProfileLib.dll
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\DynamicDataDisplay.dll
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\Fit.dll
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT_NET.xml
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT+ProfileLib.xml
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.CopyComplete

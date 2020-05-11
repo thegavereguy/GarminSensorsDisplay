@@ -1,0 +1,12 @@
+I:\ANT-SDK_PC.3.5\Debug\ANT_NET.dll
+I:\ANT-SDK_PC.3.5\Debug\ANT_NET.pdb
+I:\ANT-SDK_PC.3.5\ANT_Managed_Library\obj\x86\Debug\ANT_Managed_Library.csprojAssemblyReference.cache
+I:\ANT-SDK_PC.3.5\ANT_Managed_Library\obj\x86\Debug\ANT_Managed_Library.csproj.CoreCompileInputs.cache
+I:\ANT-SDK_PC.3.5\ANT_Managed_Library\obj\x86\Debug\ANT_NET.dll
+I:\ANT-SDK_PC.3.5\ANT_Managed_Library\obj\x86\Debug\ANT_NET.pdb
+I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_NET.dll
+I:\GARMIN_SENSORS_DISPLAY\Debug\ANT_NET.pdb
+I:\GARMIN_SENSORS_DISPLAY\ANT_Managed_Library\obj\x86\Debug\ANT_Managed_Library.csprojAssemblyReference.cache
+I:\GARMIN_SENSORS_DISPLAY\ANT_Managed_Library\obj\x86\Debug\ANT_Managed_Library.csproj.CoreCompileInputs.cache
+I:\GARMIN_SENSORS_DISPLAY\ANT_Managed_Library\obj\x86\Debug\ANT_NET.dll
+I:\GARMIN_SENSORS_DISPLAY\ANT_Managed_Library\obj\x86\Debug\ANT_NET.pdb
