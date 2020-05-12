@@ -59,12 +59,18 @@ namespace GarminSensorsDisplayGUI
         static bool inMovimentoCadenza = false;
         static double cadenza;
 
-        
-        
+        static double velocita;
+        static int ultimoEventoVelocita = 0;
+        static int ultimoNumeroGiriVelocita = 0;
+        static double ultimaVelocitaValida = 0;
+        static int pagineVelocitaRicevute = 0;
+        static double VelocitaUltimoGruppo = 0;
+
+        static double WhellCircumference = (double)28 * 2.54 * 10 * Math.PI;  //circumference of a 28 inch whell, used to calulate speed;
 
         BackgroundWorker worker;
         BackgroundWorker workerDebug;
-        delegate void BindTextBoxControlValue(double output);
+        delegate void BindTextBoxControlValue(double output, int selector);
         delegate void BindTextBoxControlError(string message,int selector);
 
         public Form1()
@@ -239,7 +245,7 @@ namespace GarminSensorsDisplayGUI
             try
             {
                 ConfigureANT(USER_NETWORK_NUM_CADENZA, channelTypeCadenza, USER_DEVICETYPE_CADENZA, USER_CHANNELPERIOD_CADENZA, channel0);
-                //ConfigureANT(USER_NETWORK_NUM_VELOCITA, channelTypeVelocita, USER_DEVICETYPE_VELOCITA, USER_CHANNELPERIOD_VELOCITA, channel1);
+                ConfigureANT(USER_NETWORK_NUM_VELOCITA, channelTypeVelocita, USER_DEVICETYPE_VELOCITA, USER_CHANNELPERIOD_VELOCITA, channel1);
                 Console.WriteLine("configurazione completata");
 
                 
@@ -320,7 +326,6 @@ namespace GarminSensorsDisplayGUI
         
         void ChannelResponseVelocita(ANT_Response response)
         {
-            //textBoxInitDebug.Text = "risposta ricevuta";
             try
             {
                 switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
@@ -329,33 +334,8 @@ namespace GarminSensorsDisplayGUI
                         {
                             switch (response.getChannelEventCode())
                             {
-                                // This event indicates that a message has just been
-                                // sent over the air. We take advantage of this event to set
-                                // up the data for the next message period.   
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TX_0x03:
-                                    {
-                                       
+   
 
-                                        // Broadcast data will be sent over the air on
-                                        // the next message period
-                                        if (bBroadcasting)
-                                        {
-                                            
-
-                                            if (bDisplay)
-                                            {
-                                                // Echo what the data will be over the air on the next message period
-                                               // Console.WriteLine("Tx: (" + response.antChannel.ToString() + ")" + BitConverter.ToString(txBuffer) + " - " + BitConverter.ToUInt16(txBuffer, 0));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            string[] ac = { "|", "/", "_", "\\" };
-                                            Console.Write("Tx: " + ac[iIndex++] + "\r");
-                                            iIndex &= 3;
-                                        }
-                                        break;
-                                    }
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_SEARCH_TIMEOUT_0x01:
                                     {
                                         Console.WriteLine("Search Timeout");
@@ -363,24 +343,10 @@ namespace GarminSensorsDisplayGUI
                                     }
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_0x02:
                                     {
-                                        Console.WriteLine("Rx Fail");
+                                        workerDebug.RunWorkerAsync(argument: new object[] { "RX Failed", 1 });
                                         break;
                                     }
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_RX_FAILED_0x04:
-                                    {
-                                        Console.WriteLine("Burst receive has failed");
-                                        break;
-                                    }
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_COMPLETED_0x05:
-                                    {
-                                        Console.WriteLine("Transfer Completed");
-                                        break;
-                                    }
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_FAILED_0x06:
-                                    {
-                                        Console.WriteLine("Transfer Failed");
-                                        break;
-                                    }
+
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_CLOSED_0x07:
                                     {
                                         // This event should be used to determine that the channel is closed.
@@ -404,11 +370,7 @@ namespace GarminSensorsDisplayGUI
                                         Console.WriteLine("Channel Collision");
                                         break;
                                     }
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_START_0x0A:
-                                    {
-                                        Console.WriteLine("Burst Started");
-                                        break;
-                                    }
+
                                 default:
                                     {
                                         Console.WriteLine("Unhandled Channel Event " + response.getChannelEventCode());
@@ -424,7 +386,7 @@ namespace GarminSensorsDisplayGUI
                     case ANT_ReferenceLibrary.ANTMessageID.EXT_ACKNOWLEDGED_DATA_0x5E:
                     case ANT_ReferenceLibrary.ANTMessageID.EXT_BURST_DATA_0x5F:
                         {
-                            if (bDisplay)
+                            if (true)
                             {
                                 if (response.isExtended()) // Check if we are dealing with an extended message
                                 {
@@ -440,7 +402,12 @@ namespace GarminSensorsDisplayGUI
                                 else
                                     Console.Write("Burst(" + response.getBurstSequenceNumber().ToString("X2") + ") Rx:(" + response.antChannel.ToString() + "): ");
 
-                                Console.Write(BitConverter.ToString(response.getDataPayload()) + Environment.NewLine);  // Display data payload
+                                //Console.Write(BitConverter.ToString(response.getDataPayload()) + Environment.NewLine);  // Display data payload
+                                velocita = calcolaVelocita(response.getDataPayload());
+      
+                                worker.RunWorkerAsync(argument: new object[] { velocita, 1 });
+
+                                workerDebug.RunWorkerAsync(argument: new object[] { "RX Success", 1 });
                             }
                             else
                             {
@@ -521,7 +488,7 @@ namespace GarminSensorsDisplayGUI
                         }
                     case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
                         {
-                            if (bDisplay)
+                            if (true)
                             {
                                 
 
@@ -529,11 +496,11 @@ namespace GarminSensorsDisplayGUI
                                 //Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + cadenza + " inmovinento: " + inMovimentoCadenza + Environment.NewLine);  // Display data payload
 
  
-                                worker.RunWorkerAsync(argument: cadenza);
+                                worker.RunWorkerAsync(argument: new object[] { cadenza, 0 });
                                 
                                 workerDebug.RunWorkerAsync(argument: new object[] {"RX Success",0 }); //i made this to sent ant integer used to select the ui element to change without creating other backgrouworkers
-                                                                                                //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=hr; 3=power)
-
+                                                                                                      //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=hr; 3=power)
+                                
                             }
                             else
                             {
@@ -706,23 +673,84 @@ namespace GarminSensorsDisplayGUI
 
         }
 
+        double calcolaVelocita(byte[] response)
+        {
+            int velocitaCount, velocitaTimeEvent;
+            double velocitaTmp = -1;
+
+            pagineVelocitaRicevute++;
+
+            velocitaCount = response[7] * 256 + response[6];
+            velocitaTimeEvent = response[5] * 256 + response[4];
+
+            
+            if (ultimoEventoVelocita - velocitaTimeEvent != 0)
+            {
+                velocitaTmp = (double)(WhellCircumference * (velocitaCount - ultimoNumeroGiriVelocita) / (velocitaTimeEvent - ultimoEventoVelocita)) * 3.6; //calculates istantaneus speed in km/s
+                inMovimentoCadenza = true;
+            }
+
+            if (velocita >= 0)
+                ultimaVelocitaValida = velocita;
+
+            if (pagineVelocitaRicevute >= 4)
+            {
+                VelocitaUltimoGruppo = velocita;
+                inMovimentoCadenza = false;
+                pagineVelocitaRicevute = 0;
+                velocita = ultimaVelocitaValida;
+            }
+
+            if (velocita == VelocitaUltimoGruppo && inMovimentoCadenza == false && VelocitaUltimoGruppo != 0)
+                velocita = 0;
+            else
+            {
+                velocita = ultimaVelocitaValida;
+                inMovimentoCadenza = true;
+            }
+
+
+            ultimoEventoVelocita = velocitaTimeEvent;
+
+            ultimoNumeroGiriVelocita = velocitaCount;
+
+
+
+
+            if (velocitaTmp >= 0)
+                return velocitaTmp;
+            else
+                return ultimaVelocitaValida;
+            
+
+        }
+
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            double output = (double)e.Argument;
+            object[] tmp = (object[])e.Argument;
+            double output = (double)tmp[0];
+            int selector = (int)tmp[1];
 
             e.Result = output;
-            this.Invoke(new BindTextBoxControlValue(UpdateTextboxValue), new object[] { output });
+            this.Invoke(new BindTextBoxControlValue(UpdateTextboxValue), new object[] { output, selector});
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-            
-            
+  
         }
-        void UpdateTextboxValue(double output)
+        void UpdateTextboxValue(double output, int selector)
         {
-            textBoxCadenza.Text = output.ToString();
+            switch (selector)
+            {
+                case 0:
+                    textBoxCadenza.Text = output.ToString();
+                    break;
+                case 1:
+                    textBoxVelocita.Text = output.ToString();
+                    break;
+            }
         }
         private void workerDebug_DoWork(object sender, DoWorkEventArgs e)
         {

@@ -41,6 +41,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxDebugVelocita = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.textBoxVelocita = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button2
@@ -153,9 +155,27 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "debbug sensore velocita";
             // 
+            // textBoxVelocita
+            // 
+            this.textBoxVelocita.Location = new System.Drawing.Point(455, 79);
+            this.textBoxVelocita.Name = "textBoxVelocita";
+            this.textBoxVelocita.Size = new System.Drawing.Size(100, 20);
+            this.textBoxVelocita.TabIndex = 13;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(455, 63);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(44, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "velocità";
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(699, 497);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.textBoxVelocita);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxDebugVelocita);
             this.Controls.Add(this.label6);
@@ -199,6 +219,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxDebugVelocita;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBoxVelocita;
+        private System.Windows.Forms.Label label8;
     }
 }
 
