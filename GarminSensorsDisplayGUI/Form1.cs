@@ -26,18 +26,24 @@ namespace GarminSensorsDisplayGUI
         static readonly byte USER_ANT_CHANNEL_VELOCITA = 1;
         static readonly ushort USER_DEVICENUM = 0;        // Device number    
         static readonly byte USER_DEVICETYPE_CADENZA = 122;
-        static readonly byte USER_DEVICETYPE_VELOCITA = 123;// Device type     ---- 122 per cadenza, 123 per velocità
-        static readonly byte USER_TRANSTYPE = 0;           // Transmission type    ----- lasciare sempre 0 per ricerca dei sensori
+        static readonly byte USER_DEVICETYPE_VELOCITA = 123;
+        static readonly byte USER_DEVICETYPE_POWER = 11;  // Device type     ---- 122 per cadenza, 123 per velocità, 11 per potenza
+        static readonly byte USER_TRANSTYPE = 0;              // ----- lasciare sempre 0 per ricerca dei sensori
+        static readonly byte USER_ANT_CHANNEL_POWER = 3;         // ANT Channel to use 
+                
 
         static readonly byte USER_RADIOFREQ = 57;          // RF Frequency + 2400 MHz
-        static readonly ushort USER_CHANNELPERIOD_CADENZA = 8102;   // Channel Period (8192/32768)s period = 4Hz
+        static readonly ushort USER_CHANNELPERIOD_CADENZA = 8102;   
         static readonly ushort USER_CHANNELPERIOD_VELOCITA = 8118;
+        static readonly ushort USER_CHANNELPERIOD_POWER = 8182;
 
         static readonly byte[] USER_NETWORK_KEY = { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 };
         static readonly byte USER_NETWORK_NUM_CADENZA = 0;         // The network key is assigned to this network number-----aggiunto _CADENZA per inizializzare singolo canale
         static readonly byte USER_NETWORK_NUM_VELOCITA = 1;         //idem
+        static readonly byte USER_NETWORK_NUM_POWER = 0;
 
-        static BikeCadenceSensor sensoreCadenza;
+      
+        static BikePowerOnlySensor virtualPowerSensor;
 
         static Network network = new Network(0, USER_NETWORK_KEY, USER_RADIOFREQ);
 
@@ -45,8 +51,10 @@ namespace GarminSensorsDisplayGUI
         static ANT_Device device0;
         static ANT_Channel channel0;
         static ANT_Channel channel1;
+        static ANT_Channel channel2;
         static ANT_ReferenceLibrary.ChannelType channelTypeCadenza;
         static ANT_ReferenceLibrary.ChannelType channelTypeVelocita;
+        static ANT_ReferenceLibrary.ChannelType channelTypePower;
         static bool bDisplay;
         static bool bBroadcasting;
         static int iIndex = 0;
@@ -68,8 +76,8 @@ namespace GarminSensorsDisplayGUI
 
         static double WhellCircumference = (double)28 * 2.54 * 10 * Math.PI;  //circumference of a 28 inch whell, used to calulate speed;
 
-        BackgroundWorker worker;
-        BackgroundWorker workerDebug;
+        static BackgroundWorker worker;
+        static BackgroundWorker workerDebug;
         delegate void BindTextBoxControlValue(double output, int selector);
         delegate void BindTextBoxControlError(string message,int selector);
 
@@ -90,8 +98,9 @@ namespace GarminSensorsDisplayGUI
         private void button2_Click(object sender, EventArgs e)
         {
             Main();
-           
-            
+
+            button2.Enabled = false;
+            button3.Enabled = true;
         }
         
         void Main()
@@ -100,7 +109,7 @@ namespace GarminSensorsDisplayGUI
 
             
 
-            textBoxInitDebug.Text = "main";
+            textBoxGeneralLog.Text = "main";
 
             try
             {
@@ -124,7 +133,7 @@ namespace GarminSensorsDisplayGUI
         ////////////////////////////////////////////////////////////////////////////////
         void Init()
         {
-            textBoxInitDebug.Text = "init";
+            textBoxGeneralLog.Text = "init";
             try
             {
 
@@ -139,8 +148,10 @@ namespace GarminSensorsDisplayGUI
                 channel0 = device0.getChannel(USER_ANT_CHANNEL_CADENZA);
                 channel0.channelResponse += new dChannelResponseHandler(ChannelResponseCadenza);
 
+                channel2 = device0.getChannel(USER_ANT_CHANNEL_POWER);    // Get channel from ANT device
+                channel2.channelResponse += new dChannelResponseHandler(ChannelResponsePower);  // Add channel response function to receive channel event messages
 
-                textBoxInitDebug.Text = "cunfigurazione completata";
+                textBoxGeneralLog.Text = "cunfigurazione completata";
 
             }
             catch (Exception ex)
@@ -178,74 +189,18 @@ namespace GarminSensorsDisplayGUI
             bBroadcasting = false;
 
 
-            textBoxInitDebug.Text = "start";
-            // If a channel type has not been set at the command line,
-            // prompt the user to specify one now
-            /* do
-             {
-                 if (ucChannelTypeCadenza == CHANNEL_TYPE_INVALID) //inserire tipo canale rer sensore di candenza
-                 {
-                     Console.WriteLine("Channel Type(cadenza)? (Master = 0, Slave = 1)");
-                     try
-                     {
-                         ucChannelTypeCadenza = byte.Parse(Console.ReadLine());
-                     }
-                     catch (Exception)
-                     {
-                         ucChannelTypeCadenza = CHANNEL_TYPE_INVALID;
-                     }
-                 }
-
-                 if (ucChannelTypeVelocita == CHANNEL_TYPE_INVALID)      //inserire tipo canale rer sensore di velocità
-                 {
-                     Console.WriteLine("Channel Type(velocita)? (Master = 0, Slave = 1)");
-                     try
-                     {
-                         ucChannelTypeVelocita = byte.Parse(Console.ReadLine());
-                     }
-                     catch (Exception)
-                     {
-                         ucChannelTypeVelocita = CHANNEL_TYPE_INVALID;
-                     }
-                 }
-
-                 if (ucChannelTypeCadenza == 0)      //assegnazione indirizzo di ricezione/trasmissione sensore cadenza
-                 {
-                     channelTypeCadenza = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
-                 }
-                 else if (ucChannelTypeCadenza == 1)
-                 {
-                     channelTypeCadenza = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00;
-                 }
-                 else
-                 {
-                     ucChannelTypeCadenza = CHANNEL_TYPE_INVALID;
-                     Console.WriteLine("Error: Invalid channel type");
-                 }
-
-                 if (ucChannelTypeVelocita == 0)     //assegnazione indirizzo di ricezione/trasmissione sensore velocità
-                 {
-                     channelTypeVelocita = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
-                 }
-                 else if (ucChannelTypeVelocita == 1)
-                 {
-                     channelTypeVelocita = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00;
-                 }
-                 else
-                 {
-                     ucChannelTypeVelocita = CHANNEL_TYPE_INVALID;
-                     Console.WriteLine("Error: Invalid channel type");
-                 }
-
-             } while (ucChannelTypeCadenza == CHANNEL_TYPE_INVALID || ucChannelTypeVelocita == CHANNEL_TYPE_INVALID);  //fa un po schifo ma vabbe, cambiare in futuro
-             */ //tolto per evitare di fare input per tipo canale da gui
-
+            textBoxGeneralLog.Text = "start";
+            
+            /*
             ucChannelTypeCadenza = byte.Parse(textBoxChannelTypeCadenza.Text);
-            ucChannelTypeVelocita = byte.Parse(textBoxChannelTypeVelocita.Text);
+            ucChannelTypeVelocita = byte.Parse(textBoxChannelTypeVelocita.Text);*/
             try
             {
-                ConfigureANT(USER_NETWORK_NUM_CADENZA, channelTypeCadenza, USER_DEVICETYPE_CADENZA, USER_CHANNELPERIOD_CADENZA, channel0);
                 ConfigureANT(USER_NETWORK_NUM_VELOCITA, channelTypeVelocita, USER_DEVICETYPE_VELOCITA, USER_CHANNELPERIOD_VELOCITA, channel1);
+                ConfigureANT(USER_NETWORK_NUM_CADENZA, channelTypeCadenza, USER_DEVICETYPE_CADENZA, USER_CHANNELPERIOD_CADENZA, channel0);
+                
+                ConfigureVirtualPowerSensor();
+
                 Console.WriteLine("configurazione completata");
 
                 
@@ -265,7 +220,7 @@ namespace GarminSensorsDisplayGUI
         ////////////////////////////////////////////////////////////////////////////////
         void ConfigureANT(byte USER_NETWORK_NUM, ANT_ReferenceLibrary.ChannelType channelType, byte USER_DEVICETYPE, ushort USER_CHANNELPERIOD, ANT_Channel channel)
         {
-            textBoxInitDebug.Text = "configure";
+            textBoxGeneralLog.Text = "configure";
 
             Console.WriteLine("Resetting module...");
             //  device0.ResetSystem();     // Soft reset
@@ -317,13 +272,32 @@ namespace GarminSensorsDisplayGUI
                 throw new Exception("Error opening channel");
             }
 
-            if (USER_DEVICETYPE == 122)
-                sensoreCadenza = new BikeCadenceSensor(channel, network);  //lasciare stare, crea sensore virtuale
 
            
         }
 
-        
+        private static void ConfigureVirtualPowerSensor()
+        {
+
+           
+            System.Threading.Thread.Sleep(500);    // Delay 500ms after a reset
+
+            Console.WriteLine("Setting network key...");
+            if (device0.setNetworkKey(USER_NETWORK_NUM_POWER, USER_NETWORK_KEY, 500))
+                Console.WriteLine("Network key set");
+            else
+                throw new Exception("Error configuring network key");
+
+            Console.WriteLine("Setting Channel ID...");
+            if (channel2.setChannelID(USER_DEVICENUM, false, USER_DEVICETYPE_POWER, USER_TRANSTYPE, 500))  // Not using pairing bit
+                Console.WriteLine("Channel ID set");
+            else
+                throw new Exception("Error configuring Channel ID");
+
+            virtualPowerSensor = new BikePowerOnlySensor(channel2, network);
+            virtualPowerSensor.TurnOn();
+            
+        }
         void ChannelResponseVelocita(ANT_Response response)
         {
             try
@@ -402,19 +376,22 @@ namespace GarminSensorsDisplayGUI
                                 else
                                     Console.Write("Burst(" + response.getBurstSequenceNumber().ToString("X2") + ") Rx:(" + response.antChannel.ToString() + "): ");
 
-                                //Console.Write(BitConverter.ToString(response.getDataPayload()) + Environment.NewLine);  // Display data payload
+                               
                                 velocita = calcolaVelocita(response.getDataPayload());
-      
-                                worker.RunWorkerAsync(argument: new object[] { velocita, 1 });
 
+                                if (!worker.IsBusy)
+                                {
+                                    worker.RunWorkerAsync(argument: new object[] { velocita, 1 });
+                                    Thread.Sleep(100);  //added this to avoid calling the worker while its busy. yeah, i know, its not an elegant solution but this is what i can do at the moment :)
+                                }
+                                    
+                                
                                 workerDebug.RunWorkerAsync(argument: new object[] { "RX Success", 1 });
+
+                                setPower(calcolaVelocita(response.getDataPayload()));
+                                
                             }
-                            else
-                            {
-                                string[] ac = { "|", "/", "_", "\\" };
-                                Console.Write("Rx: " + ac[iIndex++] + "\r");
-                                iIndex &= 3;
-                            }
+
                             break;
                         }
                     default:
@@ -453,11 +430,6 @@ namespace GarminSensorsDisplayGUI
                                         pagineCadenzaRicevute++;
                                         break;
                                     }
-                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_RX_FAILED_0x04:
-                                    {
-                                        textBoxDebugCadenza.Text = "Burst receive has failed";
-                                        break;
-                                    }
                                 
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_CLOSED_0x07:
                                     {
@@ -480,7 +452,8 @@ namespace GarminSensorsDisplayGUI
                                
                                 default:
                                     {
-                                        Console.WriteLine("Unhandled Channel Event " + response.getChannelEventCode());
+                                       // Console.WriteLine("Unhandled Channel Event " + response.getChannelEventCode());
+                                        workerDebug.RunWorkerAsync(argument: new object[] { "Unhandled Channel Event " + response.getChannelEventCode(), 0 });
                                         break;
                                     }
                             }
@@ -488,31 +461,21 @@ namespace GarminSensorsDisplayGUI
                         }
                     case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
                         {
-                            if (true)
-                            {
-                                
 
-                                 cadenza = calcolaCadenza(response.getDataPayload());
                                 //Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + cadenza + " inmovinento: " + inMovimentoCadenza + Environment.NewLine);  // Display data payload
 
  
-                                worker.RunWorkerAsync(argument: new object[] { cadenza, 0 });
+                                worker.RunWorkerAsync(argument: new object[] { calcolaCadenza(response.getDataPayload()), 0 });
                                 
                                 workerDebug.RunWorkerAsync(argument: new object[] {"RX Success",0 }); //i made this to sent ant integer used to select the ui element to change without creating other backgrouworkers
-                                                                                                      //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=hr; 3=power)
-                                
-                            }
-                            else
-                            {
-                                string[] ac = { "|", "/", "_", "\\" };
-                                textBoxDebugCadenza.Text = ("Rx: " + ac[iIndex++] + "\r");
-                                iIndex &= 3;
-                            }
+                                                                                                      //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=power; 3=hr);
+
+
                             break;
                         }
                     default:
                         {
-                            textBoxDebugCadenza.Text= ("Unknown Message " + response.responseID);
+                            textBoxLogCadence.Text= ("Unknown Message " + response.responseID);
                             break;
                         }
                 }
@@ -523,7 +486,109 @@ namespace GarminSensorsDisplayGUI
             }
         }
 
+        static void ChannelResponsePower(ANT_Response response)
+        {
+            
 
+            try
+            {
+                switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
+                {
+                    case ANT_ReferenceLibrary.ANTMessageID.RESPONSE_EVENT_0x40:
+                        {
+                            switch (response.getChannelEventCode())
+                            {
+                                // This event indicates that a message has just been
+                                // sent over the air. We take advantage of this event to set
+                                // up the data for the next message period.   
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TX_0x03:
+                                    {
+                                        
+                                        workerDebug.RunWorkerAsync(argument: new object[] { "pacchetto potenza inviato con successo", 2 });
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_SEARCH_TIMEOUT_0x01:
+                                    {
+                                        Console.WriteLine("Search Timeout");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_0x02:
+                                    {
+                                        Console.WriteLine("Rx Fail");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_RX_FAILED_0x04:
+                                    {
+                                        Console.WriteLine("Burst receive has failed");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_COMPLETED_0x05:
+                                    {
+                                        Console.WriteLine("Transfer Completed");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_FAILED_0x06:
+                                    {
+                                        Console.WriteLine("Transfer Failed");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_CLOSED_0x07:
+                                    {
+                                        // This event should be used to determine that the channel is closed.
+                                        Console.WriteLine("Channel Closed");
+                                        Console.WriteLine("Unassigning Channel...");
+                                        if (channel2.unassignChannel(500))
+                                        {
+                                            Console.WriteLine("Unassigned Channel");
+                                            Console.WriteLine("Press enter to exit");
+                                            
+                                        }
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_GO_TO_SEARCH_0x08:
+                                    {
+                                        Console.WriteLine("Go to Search");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_COLLISION_0x09:
+                                    {
+                                        Console.WriteLine("Channel Collision banana");
+                                        break;
+                                    }
+                                case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_START_0x0A:
+                                    {
+                                        Console.WriteLine("Burst Started");
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        Console.WriteLine("Unhandled Channel Event " + response.getChannelEventCode());
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
+                    case ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F:
+                    case ANT_ReferenceLibrary.ANTMessageID.BURST_DATA_0x50:
+                    case ANT_ReferenceLibrary.ANTMessageID.EXT_BROADCAST_DATA_0x5D:
+                    case ANT_ReferenceLibrary.ANTMessageID.EXT_ACKNOWLEDGED_DATA_0x5E:
+                    case ANT_ReferenceLibrary.ANTMessageID.EXT_BURST_DATA_0x5F:
+                        {
+                        }
+                        break;
+                    default:
+                        {
+                            Console.WriteLine("Unknown Message " + response.responseID);
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Channel response processing failed with exception: " + ex.Message);
+            }
+        }
         void DeviceResponse(ANT_Response response)
         {
             switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
@@ -750,6 +815,9 @@ namespace GarminSensorsDisplayGUI
                 case 1:
                     textBoxVelocita.Text = output.ToString();
                     break;
+                case 2:
+                    textBoxPower.Text = output.ToString();
+                    break;
             }
         }
         private void workerDebug_DoWork(object sender, DoWorkEventArgs e)
@@ -766,17 +834,30 @@ namespace GarminSensorsDisplayGUI
             switch (selector)
             {
                 case 0:
-                    textBoxDebugCadenza.Text = message;
+                    textBoxLogCadence.Text = message;
                     break;
                 case 1:
-                    textBoxDebugVelocita.Text = message;
+                    textBoxLogSpeed.Text = message;
+                    break;
+                case 2:
+                    textBoxLogPower.Text = message;
                     break;
             }
             
         }
+        void setPower(double newSpeed)
+        {
+            ushort power = Convert.ToUInt16(newSpeed * 200 / 30);
+            virtualPowerSensor.InstantaneousPower = Convert.ToUInt16(newSpeed * 200 / 30);
+
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync(argument: new object[] { Convert.ToDouble(power), 2 });
+        }
         private void button3_Click(object sender, EventArgs e) //pulsante fine
         {
-             MessageBox.Show("SESSIONE INTERROTTA");
+            button2.Enabled = true;
+            button3.Enabled = false;
+            MessageBox.Show("SESSIONE INTERROTTA");
            
             ANT_Device.shutdownDeviceInstance(ref device0);  // Close down the device completely and completely shut down all communication
             
@@ -787,7 +868,7 @@ namespace GarminSensorsDisplayGUI
             Application.Exit();
         }
 
-        
+
     }
 }
 
