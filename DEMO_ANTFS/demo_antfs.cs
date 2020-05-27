@@ -71,7 +71,7 @@ namespace ANTFS_Demo
              }
             catch (Exception ex)
             {
-                Console.WriteLine("Demo failed with exception: \n" + ex.Message);
+                textBoxInitDebug.Text =("Demo failed with exception: \n" + ex.Message);
             }
         }
 
@@ -82,10 +82,10 @@ namespace ANTFS_Demo
         {
             try
             {
-                Console.WriteLine("Attempting to connect to an ANT USB device...");
+                textBoxInitDebug.Text =("Attempting to connect to an ANT USB device...");
                 ANT_Common.enableDebugLogs();   // Enable debugging first, to enable ANT-FS specific logging
                 device0 = new ANT_Device();   // Create a device instance using the automatic constructor (automatic detection of USB device number and baud rate)
-                Console.WriteLine("Initialization was successful!");
+                textBoxInitDebug.Text =("Initialization was successful!");
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace ANTFS_Demo
             {
                 if (selection == Byte.MaxValue)
                 {
-                    Console.WriteLine("Please select (Host = 0, Client = 1)");
+                    textBoxInitDebug.Text =("Please select (Host = 0, Client = 1)");
                     try
                     {
                         selection = byte.Parse(Console.ReadLine());

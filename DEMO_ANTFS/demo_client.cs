@@ -82,19 +82,19 @@ namespace ANTFS_Demo
             }
             catch(ANTFS_Exception antEx)  // Handle exceptions thrown by ANT Managed library
             {
-                Console.WriteLine("ANT-FS Exception: " + antEx.Message);
+                textBoxInitDebug.Text =("ANT-FS Exception: " + antEx.Message);
             }
             catch (Exception ex)  // Handle other exceptions
             {
-                Console.WriteLine("Demo failed: " + ex.Message);
+                textBoxInitDebug.Text =("Demo failed: " + ex.Message);
                 Console.ReadLine();
             }
             finally
             {
-                Console.WriteLine("Disconnecting module...");
+                textBoxInitDebug.Text =("Disconnecting module...");
                 antDevice.Dispose();    // Close down the device completely and completely shut down all communication 
                 antfsClient.Dispose();  // Release all native resources used by the client
-                Console.WriteLine("Demo has completed successfully!");
+                textBoxInitDebug.Text =("Demo has completed successfully!");
             }
         }
 
@@ -190,7 +190,7 @@ namespace ANTFS_Demo
         /// </summary>
         public void HandleClientResponses(ANTFS_ClientChannel.Response response)
         {
-            Console.WriteLine(Print.AsString(response));   // Display response
+            textBoxInitDebug.Text =(Print.AsString(response));   // Display response
             switch (response)
             {
                 case ANTFS_ClientChannel.Response.ConnectionLost:
@@ -207,10 +207,10 @@ namespace ANTFS_Demo
                     break;
                 case ANTFS_ClientChannel.Response.BeaconClosed:
                     demoDone = true;
-                    Console.WriteLine("Press enter to exit");
+                    textBoxInitDebug.Text =("Press enter to exit");
                     break;
                 case ANTFS_ClientChannel.Response.PairingRequest:
-                    Console.WriteLine("Pairing request from " + antfsClient.GetHostName());
+                    textBoxInitDebug.Text =("Pairing request from " + antfsClient.GetHostName());
                     antfsClient.SendPairingResponse(true);
                     break;
                 case ANTFS_ClientChannel.Response.DownloadRequest:
@@ -253,12 +253,12 @@ namespace ANTFS_Demo
                 }
                 else if(response.getChannelEventCode() == ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_CLOSED_0x07)
                 {
-                    Console.WriteLine("Channel Closed");
-                    Console.WriteLine("Unassigning Channel...");
+                    textBoxInitDebug.Text =("Channel Closed");
+                    textBoxInitDebug.Text =("Unassigning Channel...");
                     if (channel0.unassignChannel(500))
                     {
-                        Console.WriteLine("Unassigned Channel");
-                        Console.WriteLine("Press enter to exit");
+                        textBoxInitDebug.Text =("Unassigned Channel");
+                        textBoxInitDebug.Text =("Press enter to exit");
                         demoDone = true;
                     }
                 }
@@ -271,7 +271,7 @@ namespace ANTFS_Demo
                     if (response.messageContents[6] == 0 &&
                         response.messageContents[7] == 0x43 &&
                         response.messageContents[8] == 0x02)
-                        Console.WriteLine("Remote device requesting ANT-FS session");
+                        textBoxInitDebug.Text =("Remote device requesting ANT-FS session");
                         antfsClient.OpenBeacon();
                 }
             }
@@ -282,12 +282,12 @@ namespace ANTFS_Demo
         /// </summary>
         public void PrintMenu()
         {
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("M - Print this menu");
-            Console.WriteLine("V - Request version");
-            Console.WriteLine("S - Request status");
-            Console.WriteLine("Q - Quit");
-            Console.WriteLine(Environment.NewLine);
+            textBoxInitDebug.Text =(Environment.NewLine);
+            textBoxInitDebug.Text =("M - Print this menu");
+            textBoxInitDebug.Text =("V - Request version");
+            textBoxInitDebug.Text =("S - Request status");
+            textBoxInitDebug.Text =("Q - Quit");
+            textBoxInitDebug.Text =(Environment.NewLine);
         }
 
         /// <summary>
@@ -306,11 +306,11 @@ namespace ANTFS_Demo
                         break;                    
                     case "V":
                     case "v":
-                        Console.WriteLine("ANT-FS Library Version " + ANTFS_ClientChannel.GetLibraryVersion());
+                        textBoxInitDebug.Text =("ANT-FS Library Version " + ANTFS_ClientChannel.GetLibraryVersion());
                         break;
                     case "S":
                     case "s":
-                        Console.WriteLine("Status: " + Print.AsString(antfsClient.GetStatus()));
+                        textBoxInitDebug.Text =("Status: " + Print.AsString(antfsClient.GetStatus()));
                         break;
                     case "Q":
                     case "q":
@@ -323,7 +323,7 @@ namespace ANTFS_Demo
             catch (ANTFS_RequestFailed_Exception antEx)
             {
                 // Inform the user that the operation requested failed, and resume operation
-                Console.WriteLine(antEx.Message);
+                textBoxInitDebug.Text =(antEx.Message);
             }
         }
     }

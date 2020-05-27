@@ -70,6 +70,9 @@ namespace ANT_Console_Demo
         static int ultimoEventoCadenza=0;
         static int ultimoNumeroGiriCadenza=0;
         static double ultimaCadenzaValida=0;
+        static int pagineCadenzaRicevute = 0;
+        static double cadenzaUltimoGruppo = 0;
+        static bool inMovimentoCadenza=false;
 
         ////////////////////////////////////////////////////////////////////////////////
         // Main
@@ -216,7 +219,7 @@ namespace ANT_Console_Demo
                     Console.WriteLine("Error: Invalid channel type");
                 }
 
-                if (ucChannelTypeVelocita == 0)     //assegnazione indirizzo di ricezione/trasmissione sensore velocità
+                if (ucChannelTypeVelocita  == 0)     //assegnazione indirizzo di ricezione/trasmissione sensore velocità
                 {
                     channelTypeVelocita = ANT_ReferenceLibrary.ChannelType.BASE_Master_Transmit_0x10;
                 }
@@ -240,7 +243,7 @@ namespace ANT_Console_Demo
                
                 while (!bDone)
                 {
-                    Console.WriteLine("banana");
+                    
                     string command = Console.ReadLine();
                     switch (command)
                     {
@@ -631,6 +634,7 @@ namespace ANT_Console_Demo
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_0x02:
                                     {
                                         Console.WriteLine("Rx Fail");
+                                        pagineCadenzaRicevute++;
                                         break;
                                     }
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_RX_FAILED_0x04:
@@ -669,6 +673,7 @@ namespace ANT_Console_Demo
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_CHANNEL_COLLISION_0x09:
                                     {
                                         Console.WriteLine("Channel Collision");
+                                        pagineCadenzaRicevute++;
                                         break;
                                     }
                                 case ANT_ReferenceLibrary.ANTEventID.EVENT_TRANSFER_TX_START_0x0A:
@@ -709,7 +714,7 @@ namespace ANT_Console_Demo
 
                                 //byte[] CadenzaRaw = response.getDataPayload();
 
-                                Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + calcolaCadenza(response.getDataPayload()) + Environment.NewLine);  // Display data payload
+                                Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + calcolaCadenza(response.getDataPayload()) + " inmovinento: " + inMovimentoCadenza +  Environment.NewLine);  // Display data payload
                             }
                             else
                             {
@@ -862,35 +867,50 @@ namespace ANT_Console_Demo
         static double calcolaCadenza(byte[] response)
         {
             int cadenzaCount, cadenzaTimeEvent;
-            double cadenza=0;
+            double cadenza=-1;
+
+            pagineCadenzaRicevute++;
 
             cadenzaCount = response[7] * 256 + response[6];
             cadenzaTimeEvent = response[5] * 256 + response[4];
 
             Console.Write("cadenzaCount: " + ( cadenzaCount)+ " tempoEvento: " + cadenzaTimeEvent + "ultimoNumerogiri: " + ultimoNumeroGiriCadenza + "ultimo evento: " + ultimoEventoCadenza + "  ");
-           
-
             if (ultimoEventoCadenza - cadenzaTimeEvent != 0 )
             {
                 cadenza = (double)(60 * (cadenzaCount - ultimoNumeroGiriCadenza) * 1024) / (cadenzaTimeEvent - ultimoEventoCadenza);
-                ultimaCadenzaValida = cadenza;
-            }
-            else if (ultimoEventoCadenza !=0)
-            {
-               cadenza = ultimaCadenzaValida;
-            }
-            else
-            {
-                cadenza = 0;
+                inMovimentoCadenza = true;
             }
             
+            if(cadenza>=0)
+            ultimaCadenzaValida = cadenza;
+
+            if (pagineCadenzaRicevute >= 4)
+            {
+                cadenzaUltimoGruppo = cadenza;
+                inMovimentoCadenza = false;
+                pagineCadenzaRicevute = 0;
+                cadenza = ultimaCadenzaValida;
+            }
+
+            if (cadenza == cadenzaUltimoGruppo && inMovimentoCadenza == false && cadenzaUltimoGruppo!=0)
+                cadenza = 0;
+            else
+            {
+                cadenza = ultimaCadenzaValida;
+                inMovimentoCadenza = true;
+            }
                 
 
             ultimoEventoCadenza = cadenzaTimeEvent;
-            ultimaCadenzaValida = cadenza;
+            
             ultimoNumeroGiriCadenza = cadenzaCount;
 
-            return cadenza;
+            if (cadenza >= 0)
+                return cadenza;
+            else
+                return ultimaCadenzaValida;
+
+            
         }
 
     }

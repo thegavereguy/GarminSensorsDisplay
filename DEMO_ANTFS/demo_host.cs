@@ -79,18 +79,18 @@ namespace ANTFS_Demo
             }
             catch(ANTFS_Exception antEx)  // Handle exceptions thrown by ANT Managed library
             {
-                Console.WriteLine("ANT-FS Exception: " + antEx.Message);
+                textBoxInitDebug.Text =("ANT-FS Exception: " + antEx.Message);
             }
             catch (Exception ex)  // Handle other exceptions
             {
-                Console.WriteLine("Demo failed: " + ex.Message);    
+                textBoxInitDebug.Text =("Demo failed: " + ex.Message);    
             }
             finally
             {
-                Console.WriteLine("Disconnecting module...");
+                textBoxInitDebug.Text =("Disconnecting module...");
                 antDevice.Dispose();    // Close down the device completely and completely shut down all communication 
                 antfsHost.Dispose();    // Release all native resources used by the host 
-                Console.WriteLine("Demo has completed successfully!");
+                textBoxInitDebug.Text =("Demo has completed successfully!");
             }
         }
 
@@ -139,7 +139,7 @@ namespace ANTFS_Demo
                 antfsHost.SearchForDevice(Demo.SearchRF, ConnectRF, DeviceNumber);
             }
             
-            Console.WriteLine("Searching for devices...");           
+            textBoxInitDebug.Text =("Searching for devices...");           
 
             // Setup a timer, so that we can cancel the search if no device is found
             searchTimer = new Timer(SearchExpired, null, SearchTimeout * 1000, Timeout.Infinite); // convert time to milliseconds
@@ -151,7 +151,7 @@ namespace ANTFS_Demo
         /// </summary>
         public void HandleHostResponses(ANTFS_HostChannel.Response response)
         {
-            Console.WriteLine(Print.AsString(response));   // Display response
+            textBoxInitDebug.Text =(Print.AsString(response));   // Display response
             switch (response)
             {
                 case ANTFS_HostChannel.Response.ConnectPass:
@@ -161,9 +161,9 @@ namespace ANTFS_Demo
                     // Obtain and display the device parameters
                     ANTFS_SearchResults foundDevice = antfsHost.GetFoundDeviceParameters();
                     if (foundDevice != null)
-                        Console.WriteLine(foundDevice.ToString());
+                        textBoxInitDebug.Text =(foundDevice.ToString());
                     else
-                        Console.WriteLine("Error obtaining device parameters");
+                        textBoxInitDebug.Text =("Error obtaining device parameters");
                     break;
                 case ANTFS_HostChannel.Response.AuthenticatePass:
                     // The authentication request was accepted
@@ -171,7 +171,7 @@ namespace ANTFS_Demo
                     byte[] authString = antfsHost.GetAuthResponse();
                     if (authString.Length > 0)
                     {
-                        Console.WriteLine("Received Passkey: Stored for use in next session");
+                        textBoxInitDebug.Text =("Received Passkey: Stored for use in next session");
                         clientPassKey = authString;    // Store Passkey for future use
                     }           
                     break;
@@ -184,34 +184,34 @@ namespace ANTFS_Demo
                         if (currentDownloadIndex == 0)   // Directory
                         {
                             // Parse downloaded directory
-                            Console.WriteLine("Received Directory");
+                            textBoxInitDebug.Text =("Received Directory");
                             dirFS = new ANTFS_Directory(dlData);
-                            Console.WriteLine(dirFS.ToString());
+                            textBoxInitDebug.Text =(dirFS.ToString());
                         }
                         else
                         {
                             // Store downloaded file
-                            Console.WriteLine("Downloaded file " + currentDownloadIndex + ", Download size: " + antfsHost.GetDownloadSize());
+                            textBoxInitDebug.Text =("Downloaded file " + currentDownloadIndex + ", Download size: " + antfsHost.GetDownloadSize());
                             if (dlData != null)
                             {
                                 File.WriteAllBytes("rawdataout.txt", dlData);
-                                Console.WriteLine("Saved to: rawdataout.txt");
+                                textBoxInitDebug.Text =("Saved to: rawdataout.txt");
                             }
                             else
                             {
-                                Console.WriteLine("No data available");
+                                textBoxInitDebug.Text =("No data available");
                             }
                         }
                     }
                     else
                     {
-                        Console.WriteLine("No data available");
+                        textBoxInitDebug.Text =("No data available");
                     }
                     break;
                 case ANTFS_HostChannel.Response.DisconnectPass:
                 case ANTFS_HostChannel.Response.ConnectionLost:
                 case ANTFS_HostChannel.Response.CancelDone:
-                    Console.WriteLine("Press any key to exit");
+                    textBoxInitDebug.Text =("Press any key to exit");
                     demoDone = true;
                     break;
                 default:
@@ -251,7 +251,7 @@ namespace ANTFS_Demo
                 ANTFS_HostChannel.State currentState = antfsHost.GetStatus();
                 if (currentState == ANTFS_HostChannel.State.Searching)
                 {
-                    Console.WriteLine("No devices found...");
+                    textBoxInitDebug.Text =("No devices found...");
                     antfsHost.Cancel();
                 }
             }
@@ -262,19 +262,19 @@ namespace ANTFS_Demo
         /// </summary>
         public void PrintMenu()
         {
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("M - Print this menu");
-            Console.WriteLine("A - Authenticate");
-            Console.WriteLine("D - Download");
-            Console.WriteLine("U - Upload");
-            Console.WriteLine("E - Erase");
-            Console.WriteLine("X - Disconnect");
-            Console.WriteLine("C - Cancel");
-            Console.WriteLine("P - Print directory");
-            Console.WriteLine("V - Request version");
-            Console.WriteLine("S - Request status");
-            Console.WriteLine("Q - Quit");
-            Console.WriteLine(Environment.NewLine);
+            textBoxInitDebug.Text =(Environment.NewLine);
+            textBoxInitDebug.Text =("M - Print this menu");
+            textBoxInitDebug.Text =("A - Authenticate");
+            textBoxInitDebug.Text =("D - Download");
+            textBoxInitDebug.Text =("U - Upload");
+            textBoxInitDebug.Text =("E - Erase");
+            textBoxInitDebug.Text =("X - Disconnect");
+            textBoxInitDebug.Text =("C - Cancel");
+            textBoxInitDebug.Text =("P - Print directory");
+            textBoxInitDebug.Text =("V - Request version");
+            textBoxInitDebug.Text =("S - Request status");
+            textBoxInitDebug.Text =("Q - Quit");
+            textBoxInitDebug.Text =(Environment.NewLine);
         }
 
         /// <summary>
@@ -295,10 +295,10 @@ namespace ANTFS_Demo
                     case "a":
                         // Send authentication request based on user selection
                         // The library will wait for the configured timeout to receive a response to the request
-                        Console.WriteLine("Select authentication mode:");
-                        Console.WriteLine("1 - Skip authentication");
-                        Console.WriteLine("2 - Request pairing");
-                        Console.WriteLine("3 - Send passkey");
+                        textBoxInitDebug.Text =("Select authentication mode:");
+                        textBoxInitDebug.Text =("1 - Skip authentication");
+                        textBoxInitDebug.Text =("2 - Request pairing");
+                        textBoxInitDebug.Text =("3 - Send passkey");
                         string authChoice = Console.ReadLine();
                         switch (authChoice)
                         {
@@ -312,18 +312,18 @@ namespace ANTFS_Demo
                                 if (clientPassKey != null)
                                     antfsHost.Authenticate(AuthenticationType.PassKey, clientPassKey, 60000);   // Use passkey, if we have one. Timeout = 60 sec
                                 else
-                                    Console.WriteLine("Try pairing first");
+                                    textBoxInitDebug.Text =("Try pairing first");
                                 break;
                             default:
-                                Console.WriteLine("Invalid authentication type.");
+                                textBoxInitDebug.Text =("Invalid authentication type.");
                                 break;
                         }
                         break;
                     case "D":
                     case "d":
                         // Send a download request based on user selection
-                        Console.WriteLine("Select the file index to download.");
-                        Console.WriteLine("Choose 0 for the directory");
+                        textBoxInitDebug.Text =("Select the file index to download.");
+                        textBoxInitDebug.Text =("Choose 0 for the directory");
                         string downloadChoice = Console.ReadLine();
                         currentDownloadIndex = Demo.ParseInput(downloadChoice);
                         antfsHost.Download(currentDownloadIndex, 0, 0);   // Start download from the beginning, and do not limit size
@@ -331,7 +331,7 @@ namespace ANTFS_Demo
                     case "U":
                     case "u":
                         // Send an upload request based on user selection
-                        Console.WriteLine("Select the file index to upload.");
+                        textBoxInitDebug.Text =("Select the file index to upload.");
                         string uploadChoice = Console.ReadLine();
                         byte[] ulData;
                         if (File.Exists("rawdataout.txt"))
@@ -339,12 +339,12 @@ namespace ANTFS_Demo
                         else
                             ulData = new byte[200];
                         antfsHost.Upload(Demo.ParseInput(uploadChoice), ulData);
-                        Console.WriteLine("Uploading: {0} bytes", ulData.Length);
+                        textBoxInitDebug.Text =("Uploading: {0} bytes", ulData.Length);
                         break;
                     case "E":
                     case "e":
                         // Send an erase request depending on user selection
-                        Console.WriteLine("Select the file index to erase");
+                        textBoxInitDebug.Text =("Select the file index to erase");
                         string eraseChoice = Console.ReadLine();
                         antfsHost.EraseData(Demo.ParseInput(eraseChoice));
                         break;
@@ -361,17 +361,17 @@ namespace ANTFS_Demo
                     case "P":
                     case "p":
                         if (dirFS != null)
-                            Console.WriteLine(dirFS.ToString());
+                            textBoxInitDebug.Text =(dirFS.ToString());
                         else
-                            Console.WriteLine("Try requesting the directory first");
+                            textBoxInitDebug.Text =("Try requesting the directory first");
                         break;
                     case "V":
                     case "v":
-                        Console.WriteLine("ANT-FS Library Version " + antfsHost.GetLibraryVersion());
+                        textBoxInitDebug.Text =("ANT-FS Library Version " + antfsHost.GetLibraryVersion());
                         break;
                     case "S":
                     case "s":
-                        Console.WriteLine("Status: " + Print.AsString(antfsHost.GetStatus()));
+                        textBoxInitDebug.Text =("Status: " + Print.AsString(antfsHost.GetStatus()));
                         break;
                     case "Q":
                     case "q":
@@ -384,12 +384,12 @@ namespace ANTFS_Demo
             catch (ANTFS_RequestFailed_Exception antEx)
             {
                 // Inform the user that the operation requested failed, and resume operation
-                Console.WriteLine(antEx.Message);
+                textBoxInitDebug.Text =(antEx.Message);
             }
             catch (System.ArgumentException argEx)
             {
                 // Inform the user about the invalid input, and resume operation
-                Console.WriteLine(argEx.Message);
+                textBoxInitDebug.Text =(argEx.Message);
             }
         }
 
