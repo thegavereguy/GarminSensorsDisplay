@@ -1,8 +1,0 @@
-﻿  DLL_exports.cpp
-     Creazione della libreria I:\GARMIN_SENSORS_DISPLAY\Release\ANT_WrappedLib.lib e dell'oggetto I:\GARMIN_SENSORS_DISPLAY\Release\ANT_WrappedLib.exp
-  Generazione codice in corso...
-  1192 of 1204 functions (99.0%) were compiled, the rest were copied from previous compilation.
-    10 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
-  Generazione codice terminata
-  ANT_Unmanaged_Wrapper.vcxproj -> I:\GARMIN_SENSORS_DISPLAY\Release\ANT_WrappedLib.dll

@@ -45,17 +45,23 @@
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxPower = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.listViewTrainers = new System.Windows.Forms.ListView();
+            this.label11 = new System.Windows.Forms.Label();
+            this.trainerSpeeds = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBoxResistanceLevel = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.trainerSpeeds)).BeginInit();
             this.SuspendLayout();
             // 
             // button2
             // 
             this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.Location = new System.Drawing.Point(307, 384);
+            this.button2.Location = new System.Drawing.Point(15, 462);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
-            this.button2.Text = "INIZIO";
+            this.button2.Text = "START";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -65,6 +71,7 @@
             this.textBoxCadenza.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCadenza.Location = new System.Drawing.Point(264, 22);
             this.textBoxCadenza.Name = "textBoxCadenza";
+            this.textBoxCadenza.ReadOnly = true;
             this.textBoxCadenza.Size = new System.Drawing.Size(135, 38);
             this.textBoxCadenza.TabIndex = 1;
             // 
@@ -88,17 +95,17 @@
             // button3
             // 
             this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(388, 384);
+            this.button3.Location = new System.Drawing.Point(106, 462);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 6;
-            this.button3.Text = "FINE";
+            this.button3.Text = "STOP";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(621, 471);
+            this.buttonExit.Location = new System.Drawing.Point(888, 471);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(75, 23);
             this.buttonExit.TabIndex = 7;
@@ -152,6 +159,7 @@
             this.textBoxVelocita.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxVelocita.Location = new System.Drawing.Point(452, 22);
             this.textBoxVelocita.Name = "textBoxVelocita";
+            this.textBoxVelocita.ReadOnly = true;
             this.textBoxVelocita.Size = new System.Drawing.Size(141, 38);
             this.textBoxVelocita.TabIndex = 13;
             // 
@@ -185,6 +193,7 @@
             this.textBoxPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxPower.Location = new System.Drawing.Point(264, 104);
             this.textBoxPower.Name = "textBoxPower";
+            this.textBoxPower.ReadOnly = true;
             this.textBoxPower.Size = new System.Drawing.Size(135, 38);
             this.textBoxPower.TabIndex = 17;
             // 
@@ -197,21 +206,83 @@
             this.label10.TabIndex = 18;
             this.label10.Text = "Power";
             // 
-            // listBox1
+            // listViewTrainers
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "icoa",
-            "afewfo"});
-            this.listBox1.Location = new System.Drawing.Point(15, 240);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 95);
-            this.listBox1.TabIndex = 19;
+            this.listViewTrainers.HideSelection = false;
+            this.listViewTrainers.Location = new System.Drawing.Point(15, 241);
+            this.listViewTrainers.Name = "listViewTrainers";
+            this.listViewTrainers.Size = new System.Drawing.Size(169, 184);
+            this.listViewTrainers.TabIndex = 19;
+            this.listViewTrainers.UseCompatibleStateImageBehavior = false;
+            this.listViewTrainers.View = System.Windows.Forms.View.List;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(12, 225);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(56, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "trainers list";
+            // 
+            // trainerSpeeds
+            // 
+            this.trainerSpeeds.Location = new System.Drawing.Point(202, 241);
+            this.trainerSpeeds.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.trainerSpeeds.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.trainerSpeeds.Name = "trainerSpeeds";
+            this.trainerSpeeds.Size = new System.Drawing.Size(37, 20);
+            this.trainerSpeeds.TabIndex = 21;
+            this.trainerSpeeds.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.trainerSpeeds.ValueChanged += new System.EventHandler(this.trainerSpeeds_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(199, 225);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(79, 13);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "selected speed";
+            // 
+            // textBoxResistanceLevel
+            // 
+            this.textBoxResistanceLevel.Location = new System.Drawing.Point(202, 307);
+            this.textBoxResistanceLevel.Name = "textBoxResistanceLevel";
+            this.textBoxResistanceLevel.ReadOnly = true;
+            this.textBoxResistanceLevel.Size = new System.Drawing.Size(76, 20);
+            this.textBoxResistanceLevel.TabIndex = 23;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(199, 291);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(80, 13);
+            this.label13.TabIndex = 24;
+            this.label13.Text = "resistance level";
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(699, 497);
-            this.Controls.Add(this.listBox1);
+            this.ClientSize = new System.Drawing.Size(965, 497);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.textBoxResistanceLevel);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.trainerSpeeds);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.listViewTrainers);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.textBoxPower);
             this.Controls.Add(this.label9);
@@ -231,6 +302,7 @@
             this.Controls.Add(this.button2);
             this.Name = "Form1";
             this.Text = "Garmin Sensors Display GUI";
+            ((System.ComponentModel.ISupportInitialize)(this.trainerSpeeds)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,7 +335,12 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBoxPower;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListView listViewTrainers;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown trainerSpeeds;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBoxResistanceLevel;
+        private System.Windows.Forms.Label label13;
     }
 }
 

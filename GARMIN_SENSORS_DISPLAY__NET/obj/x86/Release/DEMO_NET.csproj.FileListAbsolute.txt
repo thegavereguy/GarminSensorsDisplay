@@ -1,8 +1,0 @@
-I:\ANT-SDK_PC.3.5\Release\demo_net.exe.config
-I:\ANT-SDK_PC.3.5\Release\demo_net.exe
-I:\ANT-SDK_PC.3.5\Release\demo_net.pdb
-I:\ANT-SDK_PC.3.5\DEMO_NET\obj\x86\Release\DEMO_NET.csprojAssemblyReference.cache
-I:\ANT-SDK_PC.3.5\DEMO_NET\obj\x86\Release\DEMO_NET.csproj.CoreCompileInputs.cache
-I:\ANT-SDK_PC.3.5\DEMO_NET\obj\x86\Release\DEMO_NET.csproj.CopyComplete
-I:\ANT-SDK_PC.3.5\DEMO_NET\obj\x86\Release\demo_net.exe
-I:\ANT-SDK_PC.3.5\DEMO_NET\obj\x86\Release\demo_net.pdb

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <trainer brand="Elite" model="Arion Mag">
+    
+    <resistance-levels speeds="3">
+
+      <r pos="0">6,6666</r>
+
+      <r pos="1">9,375</r>
+
+      <r pos="2">12,8205</r>
+      
+    </resistance-levels>
+    
+  </trainer>
+
+  
+  
+</root>
+
+
+
+
+
+

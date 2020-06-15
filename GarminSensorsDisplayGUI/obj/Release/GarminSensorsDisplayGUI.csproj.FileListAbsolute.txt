@@ -14,3 +14,4 @@ C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\Fit.dll
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT_NET.xml
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT+ProfileLib.xml
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.CopyComplete
+C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\trainersList.xml

@@ -1,6 +1,0 @@
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\bin\Release\ClassLibrary1.dll
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\bin\Release\ClassLibrary1.pdb
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\obj\Release\ClassLibrary1.csprojAssemblyReference.cache
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\obj\Release\ClassLibrary1.csproj.CoreCompileInputs.cache
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\obj\Release\ClassLibrary1.dll
-I:\GARMIN_SENSORS_DISPLAY\ClassLibrary1\obj\Release\ClassLibrary1.pdb

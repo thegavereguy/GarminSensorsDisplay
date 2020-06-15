@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using System.Xml;
 using ANT_Managed_Library;
 using AntPlus.Profiles.BikeCadence;
 using AntPlus.Profiles.BikePower;
@@ -81,6 +82,9 @@ namespace GarminSensorsDisplayGUI
         delegate void BindTextBoxControlValue(double output, int selector);
         delegate void BindTextBoxControlError(string message,int selector);
 
+        bool isMoving;
+
+        double resistanceValue;
         public Form1()
         {
             InitializeComponent();
@@ -92,15 +96,34 @@ namespace GarminSensorsDisplayGUI
             
             
             workerDebug.DoWork += workerDebug_DoWork;
-            
+
+            loadTrainers();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Main();
 
-            button2.Enabled = false;
-            button3.Enabled = true;
+            if (listViewTrainers.SelectedItems.Count > 0)
+            {
+                button2.Enabled = false;
+                button3.Enabled = true;
+                loadTrainersSpeeds();
+                listViewTrainers.Enabled = false;
+
+                trainerSpeeds.Value++;  //faking a number change to update of the resistance level textbox
+                trainerSpeeds.Value--;
+            }
+            else
+            {
+                MessageBox.Show("SELECT A TRAINER!!!");
+            }
+
+            
+
+            
+
         }
         
         void Main()
@@ -376,6 +399,7 @@ namespace GarminSensorsDisplayGUI
                                 else
                                     Console.Write("Burst(" + response.getBurstSequenceNumber().ToString("X2") + ") Rx:(" + response.antChannel.ToString() + "): ");
 
+                                isMoving = checkMovement(response.getDataPayload());
                                
                                 velocita = calcolaVelocita(response.getDataPayload());
 
@@ -462,13 +486,18 @@ namespace GarminSensorsDisplayGUI
                     case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
                         {
 
-                                //Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + cadenza + " inmovinento: " + inMovimentoCadenza + Environment.NewLine);  // Display data payload
+                            //Console.Write(BitConverter.ToString(response.getDataPayload()) + " cadenza:  " + cadenza + " inmovinento: " + inMovimentoCadenza + Environment.NewLine);  // Display data payload
 
- 
+                            if (!worker.IsBusy)
+                            {
                                 worker.RunWorkerAsync(argument: new object[] { calcolaCadenza(response.getDataPayload()), 0 });
-                                
-                                workerDebug.RunWorkerAsync(argument: new object[] {"RX Success",0 }); //i made this to sent ant integer used to select the ui element to change without creating other backgrouworkers
-                                                                                                      //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=power; 3=hr);
+                                workerDebug.RunWorkerAsync(argument: new object[] { "RX Success", 0 }); //i made this to sent ant integer used to select the ui element to change without creating other backgrouworkers
+                                                                                                        //pattern {message,selector} (selecort: 0=cadence; 1=speed; 2=power; 3=hr);
+                                Thread.Sleep(150);
+                            }
+
+
+
 
 
                             break;
@@ -755,25 +784,11 @@ namespace GarminSensorsDisplayGUI
                 inMovimentoCadenza = true;
             }
 
-            if (velocita >= 0)
-                ultimaVelocitaValida = velocita;
+            if (velocitaTmp >= 0)
+                ultimaVelocitaValida = velocitaTmp;
 
-            if (pagineVelocitaRicevute >= 4)
-            {
-                VelocitaUltimoGruppo = velocita;
-                inMovimentoCadenza = false;
-                pagineVelocitaRicevute = 0;
-                velocita = ultimaVelocitaValida;
-            }
-
-            if (velocita == VelocitaUltimoGruppo && inMovimentoCadenza == false && VelocitaUltimoGruppo != 0)
-                velocita = 0;
-            else
-            {
-                velocita = ultimaVelocitaValida;
-                inMovimentoCadenza = true;
-            }
-
+            if (!isMoving)
+                velocitaTmp = 0;
 
             ultimoEventoVelocita = velocitaTimeEvent;
 
@@ -847,11 +862,54 @@ namespace GarminSensorsDisplayGUI
         }
         void setPower(double newSpeed)
         {
-            ushort power = Convert.ToUInt16(newSpeed * 200 / 30);
-            virtualPowerSensor.InstantaneousPower = Convert.ToUInt16(newSpeed * 200 / 30);
+            ushort power = Convert.ToUInt16(newSpeed * resistanceValue);
+            virtualPowerSensor.InstantaneousPower = Convert.ToUInt16(newSpeed * resistanceValue);
 
             if (!worker.IsBusy)
                 worker.RunWorkerAsync(argument: new object[] { Convert.ToDouble(power), 2 });
+        }
+        bool checkMovement(byte[] response)
+        {
+            if (response[1] == 0)
+                return true;
+            else
+                return false;
+        }
+
+        void loadTrainers()     //this just load all the trainers in the listview
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("trainersList.xml");
+
+            foreach(XmlNode node in doc.DocumentElement)        //still experimenting with better ways to check values in xml nodes (i'm a noob :) )
+            {
+                listViewTrainers.Items.Add(node.Attributes[0].InnerText + " " + node.Attributes[1].InnerText);
+            }
+
+        }
+
+        void loadTrainersSpeeds()       //this changes the maximun number in the resistence level selector
+        {
+
+                string tmp = listViewTrainers.SelectedItems[0].Text;
+
+                XmlDocument doc = new XmlDocument();
+                doc.Load("trainersList.xml");
+
+                foreach (XmlNode node in doc.DocumentElement)
+                {
+                    if (tmp == node.Attributes[0].InnerText + " " + node.Attributes[1].InnerText)
+                    {
+                        foreach(XmlNode childNode in node.ChildNodes)
+                        {
+                            
+                            trainerSpeeds.Maximum = Int16.Parse(childNode.Attributes[0].Value);
+                        }
+                    }
+                }
+
+
+
         }
         private void button3_Click(object sender, EventArgs e) //pulsante fine
         {
@@ -860,15 +918,44 @@ namespace GarminSensorsDisplayGUI
             MessageBox.Show("SESSIONE INTERROTTA");
            
             ANT_Device.shutdownDeviceInstance(ref device0);  // Close down the device completely and completely shut down all communication
+            trainerSpeeds.Maximum = 1;
             
+            listViewTrainers.Enabled = true;
         }
 
-        private void buttonExit_Click(object sender, EventArgs e) //pulsante uscita
+        private void buttonExit_Click(object sender, EventArgs e) //exit button
         {
             Application.Exit();
         }
 
+        private void trainerSpeeds_ValueChanged(object sender, EventArgs e)     //this changes the resistance level whenever the value is changed, this can be changed whitout stopping the activity
+        {
+            string tmp = listViewTrainers.SelectedItems[0].Text;
 
+            XmlDocument doc = new XmlDocument();
+            doc.Load("trainersList.xml");
+
+            foreach (XmlNode node in doc.DocumentElement)
+            {
+                if (tmp == node.Attributes[0].InnerText + " " + node.Attributes[1].InnerText)
+                {
+                    foreach (XmlNode childNode in node.ChildNodes)
+                    {
+
+                        foreach(XmlNode res in childNode.ChildNodes)
+                        {
+                            if (Int16.Parse(res.Attributes[0].Value) == trainerSpeeds.Value - 1)
+                            {
+                                textBoxResistanceLevel.Text = res.InnerText;
+
+                                resistanceValue = Convert.ToDouble(textBoxResistanceLevel.Text);
+                              
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
