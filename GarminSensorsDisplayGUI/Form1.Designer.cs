@@ -51,6 +51,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxResistanceLevel = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trainerSpeeds)).BeginInit();
             this.SuspendLayout();
             // 
@@ -274,9 +276,29 @@
             this.label13.TabIndex = 24;
             this.label13.Text = "resistance level";
             // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.Location = new System.Drawing.Point(354, 172);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(588, 260);
+            this.cartesianChart1.TabIndex = 25;
+            this.cartesianChart1.Text = "cartesianChart1";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(490, 462);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 26;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(965, 497);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.cartesianChart1);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.textBoxResistanceLevel);
             this.Controls.Add(this.label12);
@@ -341,6 +363,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBoxResistanceLevel;
         private System.Windows.Forms.Label label13;
+        private LiveCharts.WinForms.CartesianChart cartesianChart1;
+        private System.Windows.Forms.Button button4;
     }
 }
 

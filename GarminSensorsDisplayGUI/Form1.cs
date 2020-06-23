@@ -16,6 +16,9 @@ using AntPlus.Profiles.BikePower;
 using AntPlus.Profiles.BikeSpeed;
 using AntPlus.Profiles.Components;
 using AntPlus.Types;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 
 namespace GarminSensorsDisplayGUI
 {
@@ -956,6 +959,46 @@ namespace GarminSensorsDisplayGUI
                 }
             }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            cartesianChart1.Series = new SeriesCollection
+                {
+                    new LineSeries
+                    {
+                        Values = new ChartValues<ObservablePoint>
+                        {
+                            new ObservablePoint(0,velocita),      //First Point of First Line
+                            new ObservablePoint(4,7),       //2nd POint
+                            new ObservablePoint(5,3),     //------
+                            new ObservablePoint(7,6),
+                            new ObservablePoint(10,8)
+                        },
+                        PointGeometrySize = 0.4
+                    },
+                    new LineSeries
+                    {
+                        Title="prova",
+                        Values = new ChartValues<ObservablePoint>
+                        {
+                            new ObservablePoint(0,virtualPowerSensor.InstantaneousPower),      //First Point of First Line
+                            new ObservablePoint(1,7),       //2nd POint
+                            new ObservablePoint(2,3),     //------
+                            new ObservablePoint(3,6),
+                            new ObservablePoint(6,8)
+                        },
+                        PointGeometrySize = 0
+                    },
+
+
+
+                };
+
+           
+
+        }
+        
     }
 }
 

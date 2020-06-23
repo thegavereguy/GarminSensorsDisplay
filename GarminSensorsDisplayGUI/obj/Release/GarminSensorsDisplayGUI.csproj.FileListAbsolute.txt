@@ -15,3 +15,25 @@ C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT_NET.xml
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\ANT+ProfileLib.xml
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.CopyComplete
 C:\Users\enric\source\repos\GarminSensorsDisplayGUI\bin\Release\trainersList.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\trainersList.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.exe.config
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.exe
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\GarminSensorsDisplayGUI.pdb
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\ANT+ProfileLib.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\ANT_NET.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csprojAssemblyReference.cache
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.Form1.resources
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.Properties.Resources.resources
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.GenerateResource.cache
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.csproj.CopyComplete
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.exe
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\obj\Release\GarminSensorsDisplayGUI.pdb
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.dll
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.WinForms.dll
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.Wpf.dll
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.pdb
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.WinForms.pdb
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.WinForms.xml
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.Wpf.pdb
+C:\Users\Enrico Dalla Cia\Documents\GarminSensorsDisplay\GarminSensorsDisplayGUI\bin\Release\LiveCharts.Wpf.xml
